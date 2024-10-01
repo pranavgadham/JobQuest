@@ -1,0 +1,45 @@
+
+:root{
+    --headerColor:#03346E;
+
+}
+
+/* layout page styling */
+.bgColor{
+    background-color:var(--headerColor);
+}
+.fontColor{
+    color: white;
+}
+
+/* Home page styling */
+#homeContiner,#jobContiner{
+    
+    padding: 16px;   
+    color:white;
+    height: 100vh;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    align-items: baseline;
+}
+#homeRight img{
+    height: 100%;
+    width: 100%;
+}
+
+/* Job page styling */
+.customeCard{
+    background-color : #03346E;
+    color:white;
+    margin: 8px;
+}
+.customeCardTitle{
+    color:#EAD8B1
+}
+.customeButton{
+    width:100%;
+    text-align: center;
+}
+
+/* 404 error page*/
