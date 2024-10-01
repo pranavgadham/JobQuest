@@ -20,3 +20,7 @@ export const jobDetailController = (req,res) =>{
         res.render('404',{login:false});
     }
 }
+
+export const registerController = (req,res)=>{
+    
+}
