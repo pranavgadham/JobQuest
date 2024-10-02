@@ -4,7 +4,7 @@ import session from 'express-session';
 import dotenv from 'dotenv';
 import multer from 'multer';
 import expressEjsLayouts from 'express-ejs-layouts';
-import { homeController,jobController, jobDetailController } from './src/controller/controller.js';
+import { homeController,jobController, jobDetailController, registerController, loginController, loginPageController, logOut } from './src/controller/controller.js';
 // Express App Configuration
 const app = express();
 
@@ -43,5 +43,9 @@ const upload = multer({ storage });
 app.get('/', homeController);
 app.get('/jobs',jobController);
 app.get('/job/:id',jobDetailController);
+app.post('/register',registerController);
+app.get('/login',loginPageController)
+app.post('/login',loginController)
+app.get('/logout',logOut);
 
 export default app;

@@ -1,6 +1,6 @@
 
 :root{
-    --headerColor:#03346E;
+    --headerColor:#A594F9;
 
 }
 
@@ -30,12 +30,12 @@
 
 /* Job page styling */
 .customeCard{
-    background-color : #03346E;
+    background-color : #CDC1FF;
     color:white;
     margin: 8px;
 }
 .customeCardTitle{
-    color:#EAD8B1
+    color:#758694;    
 }
 .customeButton{
     width:100%;
@@ -43,3 +43,24 @@
 }
 
 /* 404 error page*/
+.error-box
+{
+  min-height: 96vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+.top
+{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Loginpage CSS */
+.loginForm{
+    padding:16px; 
+    margin: 16px;
+}

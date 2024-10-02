@@ -4,11 +4,96 @@
     <h5>Job opportunities and internships.</h5>
     <h5>Get Discovered. Get Hired.</h5>
     <div id="actionContiner">
-      <a class="btn btn-primary" href="/jobs" role="button">Link</a>
+      <a class="btn btn-primary" href="/jobs" role="button">I'm A Job Seekar</a>
+      <!-- Button trigger modal -->
+      <button
+        type="button"
+        class="btn btn-primary"
+        data-bs-toggle="modal"
+        data-bs-target="#staticBackdrop"
+      >
+        I'm A Recruiter
+      </button>
+
+      <!-- Modal -->
+      <div
+        class="modal fade"
+        id="staticBackdrop"
+        data-bs-backdrop="static"
+        data-bs-keyboard="false"
+        tabindex="-1"
+        aria-labelledby="staticBackdropLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content bgColor">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="staticBackdropLabel">
+                Experience JobQuest!
+              </h1>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <form action="/register" method="post" class="p-2">
+                <div class="mb-3">
+                  <div class="input-group">
+                    <span class="input-group-text">Name</span>
+                    <input
+                      required=""
+                      name="name"
+                      type="text"
+                      aria-label="name"
+                      class="form-control"
+                      placeholder="enter your name"
+                    />
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <div class="input-group">
+                    <span class="input-group-text">Email</span>
+                    <input
+                      required=""
+                      name="email"
+                      type="email"
+                      aria-label="email"
+                      class="form-control"
+                      placeholder="enter your email"
+                    />
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <div class="input-group">
+                    <span class="input-group-text">Password</span>
+                    <input
+                      required=""
+                      name="password"
+                      type="password"
+                      aria-label="password"
+                      class="form-control"
+                      placeholder="enter your password"
+                    />
+                  </div>
+                </div>
+
+                <button class="btn btn-primary" type="submit">Register</button>
+              </form>
+            </div>
+            <div class="modal-footer">
+              Already registered?
+              <p><a href="/login" class="btn btn-primary">Login</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
   <div id="homeRight">
     <img src="asset/banner.png" />
   </div>
 </div>
-
