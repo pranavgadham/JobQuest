@@ -4,6 +4,10 @@
 
 }
 
+.centerStyle{
+    text-align: center;
+}
+
 /* layout page styling */
 .bgColor{
     background-color:var(--headerColor);
@@ -60,7 +64,7 @@
 }
 
 /* Loginpage CSS */
-.loginForm{
+.loginForm,.jobDetailCard{
     padding:16px; 
     margin: 16px;
 }

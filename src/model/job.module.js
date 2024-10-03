@@ -11,3 +11,21 @@ export const getJobById = (id) =>{
     const job = jobs.find(j => j.id == Number(id));
     return job;
 }
+
+export const addApplicant = (id, { name, email, contact, resumeURL }) => {
+    const resumePath = '/resumes/' + resumeURL;
+  
+    const applicant = {
+      id: Date.now(),
+      name: name,
+      email: email,
+      contact: contact,
+      resume: resumePath
+    };
+    console.log(applicant);
+    const job = getJobById(id);
+    job.applicants.push(applicant);
+  
+    return true;
+  };
+  

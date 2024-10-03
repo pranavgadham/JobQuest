@@ -1,8 +1,121 @@
-<div class="card">
-    <h5 class="card-header"><%= job.companey %></h5>
-    <div class="card-body">
-      <h5 class="card-title">Special title treatment</h5>
-      <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-      <a href="#" class="btn btn-primary">Go somewhere</a>
-    </div>
+<div class="jobDetailCard">
+    <div class="card customeCard">
+        <div class="card-header centerStyle customeCardTitle"><h3><%= job.companey %></h3></div>
+        <div class="card-body">
+          <h5 class="card-title"><%= job.role %></h5>
+          <p class="card-text">
+              <p class="card-text"><i class="fa-solid fa-location-dot fa-lg" style="color: #FFD43B;"></i> <%= job.location %></p>
+              <p class="card-text"><i class="fa-solid fa-indian-rupee-sign fa-lg" style="color: #FFD43B;"></i> <%= job.package %></p>
+              <p class="card-text"><i class="fa-solid fa-hourglass fa-lg" style="color: #FFD43B;"></i> Apply By <%= job.deadline %></p>
+              <p class="card-text"><i class="fa-solid fa-star fa-lg" style="color: #FFD43B;"></i> Number of openings <%= job.openings %></p>
+              <p><a href="/applicants" class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"><i class="fa-solid fa-user fa-lg" style="color: #FFD43B;"></i> Applicants <%= job.applicants.length %></a></p>
+      
+              <p class="card-text">Skills:</p>
+              <div>
+                  <% job.skills.forEach(skill=>{ %>
+                      <div class="btn btn-outline-primary" style="cursor: default;"><%= skill %></div>
+                  <% }) %>
+              </div>
+          </p>
+          <button
+        type="button"
+        class="btn btn-primary"
+        data-bs-toggle="modal"
+        data-bs-target="#staticBackdrop"
+      >
+      Apply Now
+      </button>
+
+      <!-- Modal -->
+      <div
+        class="modal fade"
+        id="staticBackdrop"
+        data-bs-backdrop="static"
+        data-bs-keyboard="false"
+        tabindex="-1"
+        aria-labelledby="staticBackdropLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content bgColor">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="staticBackdropLabel">
+                JobQuest
+              </h1>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+                <h4>apply in less than 1 minute</h4>
+              <form action="/apply/<%= job.id  %>" method="post" class="p-2">
+                <div class="mb-3">
+                  <div class="input-group">
+                    <span class="input-group-text">Name</span>
+                    <input
+                      required=""
+                      name="name"
+                      id="name"
+                      type="text"
+                      aria-label="name"
+                      class="form-control"
+                      placeholder="enter your name"
+                    />
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <div class="input-group">
+                    <span class="input-group-text">Email</span>
+                    <input
+                      required=""
+                      name="email"
+                      type="email"
+                      id="email"
+                      aria-label="email"
+                      class="form-control"
+                      placeholder="enter your email"
+                    />
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <div class="input-group">
+                    <span class="input-group-text">Contact</span>
+                    <input
+                      required=""
+                      name="contact"
+                      id="contact"
+                      type="tel"
+                      aria-label="contact"
+                      class="form-control"
+                      placeholder="+91 _ _ _ _ _  _ _ _ _ _"
+                    />
+                  </div>
+                </div>
+                <div class="mb-3">
+                    <div class="input-group">
+                      <span class="input-group-text">Resume</span>
+                      <input
+                        required=""
+                        type="file"
+                        aria-label="resume"
+                        class="form-control"
+                        id="resume" 
+                        name="resume" 
+                        accept=".pdf"
+                      />
+                    </div>
+                  </div>
+
+                <button class="btn btn-primary" type="submit">Register</button>
+              </form>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+      
 </div>
