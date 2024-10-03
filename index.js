@@ -15,6 +15,8 @@ import {
   errorControlle,
   applyHandler,
   applicantsHandler,
+  getFormController,
+  jobPostController
 } from "./src/controller/controller.js";
 
 // Express App Configuration
@@ -43,7 +45,6 @@ app.use(
   })
 );
 
-console.log(resumeUpload);
 
 // Routes (dynamic routes come after static files)
 app.get("/", homeController);
@@ -56,5 +57,7 @@ app.get("/job/:id", jobDetailController);
 app.get("/404", errorControlle);
 app.post("/apply/:id", resumeUpload.single("resumeURL"), applyHandler);
 app.get("/applicants", applicantsHandler);
+app.get('/postjob',getFormController);
+app.post('/postjob',jobPostController)
 
 export default app;

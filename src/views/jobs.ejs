@@ -2,14 +2,14 @@
   <% jobs.forEach(job => { %>
   <div class="card customeCard" style="width: 18rem" id= <%= job.id %>>
     <div class="card-body">
-      <h3 class="card-title customeCardTitle"><%= job.companey %></h3>
+      <h3 class="card-title customeCardTitle"><%= job.company %></h3>
       <p class="card-text">Tech: <%= job.role %></p>
       <p class="card-text"><i class="fa-solid fa-location-dot fa-lg" style="color: #FFD43B;"></i> <%= job.location %></p>
-      <p class="card-text"><i class="fa-solid fa-indian-rupee-sign fa-lg" style="color: #FFD43B;"></i> <%= job.package %></p>
+      <p class="card-text"><i class="fa-solid fa-indian-rupee-sign fa-lg" style="color: #FFD43B;"></i> <%= job.salary %></p>
       <p class="card-text">Skills:</p>
       <div>
         <% job.skills.forEach(skill=>{ %>
-            <div class="btn btn-outline-primary" style="cursor: default;"><%= skill %></div>
+            <div class="btn btn-outline-primary" style="cursor: default;margin:2px"><%= skill %></div>
         <% }) %>
       </div>
       <br>

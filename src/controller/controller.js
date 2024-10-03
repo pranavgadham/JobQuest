@@ -1,4 +1,4 @@
-import { getAllJobs, getJobById, addApplicant } from "../model/job.module.js";
+import { getAllJobs, getJobById, addApplicant, addJob } from "../model/job.module.js";
 import { addUser, verify } from "../model/user.module.js";
 
 
@@ -83,3 +83,23 @@ export const applyHandler = (req, res) => {
 export const applicantsHandler = (req,res) =>{
 
 }
+
+export const getFormController = (req,res) => {
+  if(req.session.userName){
+    res.status(200).render('jobPostForm',{login: req.session.userName});
+  }else{
+    res.status(404).render('404',{login: req.session.userName,message:""});
+  }
+
+}
+
+export const jobPostController = (req,res) => {
+  if(req.body){
+    addJob(req.body);
+    res.status(200).redirect('/jobs');
+  }
+  else{
+    res.status(404).render('404',{login: req.session.userName,message:""});
+  }
+}
+
