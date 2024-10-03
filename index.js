@@ -16,7 +16,8 @@ import {
   applyHandler,
   applicantsHandler,
   getFormController,
-  jobPostController
+  jobPostController,
+  jobDeleteController
 } from "./src/controller/controller.js";
 
 // Express App Configuration
@@ -59,5 +60,6 @@ app.post("/apply/:id", resumeUpload.single("resumeURL"), applyHandler);
 app.get("/applicants", applicantsHandler);
 app.get('/postjob',getFormController);
 app.post('/postjob',jobPostController)
+app.get('/job/:id/delete',jobDeleteController);
 
 export default app;

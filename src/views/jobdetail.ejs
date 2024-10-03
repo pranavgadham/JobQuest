@@ -3,6 +3,7 @@
         <div class="card-header centerStyle customeCardTitle"><h3><%= job.company %></h3></div>
         <div class="card-body">
           <h5 class="card-title"><%= job.role %></h5>
+          
           <p class="card-text">
               <p class="card-text"><i class="fa-solid fa-location-dot fa-lg" style="color: #FFD43B;"></i> <%= job.location %></p>
               <p class="card-text"><i class="fa-solid fa-indian-rupee-sign fa-lg" style="color: #FFD43B;"></i> <%= job.salary %></p>
@@ -25,6 +26,10 @@
       >
       Apply Now
       </button>
+      <% if(login){ %> 
+        <a href="/job/<%= job.id %>/update"><i class="fa-solid fa-pen fa-lg customeIcon" style="color: #0433ff;"></i></a>
+        <a href="/job/<%= job.id %>/delete"><i class="fa-regular fa-trash-can fa-lg customeIcon" style="color: #ff2600;"></i></a>
+      <% } %>
 
       <!-- Modal -->
       <div

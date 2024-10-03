@@ -1,4 +1,4 @@
-const jobs = [
+let jobs = [
   {
     id: 1,
     company: "xyz",
@@ -49,15 +49,7 @@ export const addApplicant = (id, { name, email, contact, resumeURL }) => {
   return true;
 };
 
-export const addJob = ({
-  company,
-  role,
-  location,
-  salary,
-  deadline,
-  openings,
-  skills,
-}) => {
+export const addJob = ({company,role,location,salary,deadline,openings,skills}) => {
   const skill = skills.split(",");
   const job = {
     id:Date.now(),
@@ -73,3 +65,14 @@ export const addJob = ({
   jobs.push(job);
   return;
 };
+
+export const deleteJob = (id) => {
+  if(id){
+    const job = getJobById(id);
+    jobs = jobs.filter(j=> j.id != id);
+    return job;
+  }
+  else{
+    throw new Error("Job not Found");
+  }
+}

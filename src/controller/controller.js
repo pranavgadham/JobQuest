@@ -1,4 +1,4 @@
-import { getAllJobs, getJobById, addApplicant, addJob } from "../model/job.module.js";
+import { getAllJobs, getJobById, addApplicant, addJob,deleteJob } from "../model/job.module.js";
 import { addUser, verify } from "../model/user.module.js";
 
 
@@ -103,3 +103,13 @@ export const jobPostController = (req,res) => {
   }
 }
 
+export const jobDeleteController = (req,res) => {
+  const id = req.params.id;
+  const deletedJob = deleteJob(id);
+  if(deleteJob){
+    res.status(200).redirect('/jobs');
+  }
+  else{
+    res.status(500).render('404',{login: req.session.userName,message:"Job not found"});
+  }
+}
