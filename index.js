@@ -17,7 +17,9 @@ import {
   applicantsHandler,
   getFormController,
   jobPostController,
-  jobDeleteController
+  jobDeleteController,
+  getJobUpdateController,
+  jobUpdateController
 } from "./src/controller/controller.js";
 
 // Express App Configuration
@@ -56,10 +58,12 @@ app.post("/login", loginController);
 app.get("/logout", logOut);
 app.get("/job/:id", jobDetailController);
 app.get("/404", errorControlle);
-app.post("/apply/:id", resumeUpload.single("resumeURL"), applyHandler);
+app.post("/apply/:id", resumeUpload.single("resume"), applyHandler);
 app.get("/applicants", applicantsHandler);
 app.get('/postjob',getFormController);
 app.post('/postjob',jobPostController)
 app.get('/job/:id/delete',jobDeleteController);
+app.get('/job/:id/update',getJobUpdateController);
+app.post('/job/:id/update',jobUpdateController);
 
 export default app;

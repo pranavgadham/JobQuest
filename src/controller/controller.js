@@ -1,4 +1,4 @@
-import { getAllJobs, getJobById, addApplicant, addJob,deleteJob } from "../model/job.module.js";
+import { getAllJobs, getJobById, addApplicant, addJob, deleteJob, updateJob } from "../model/job.module.js";
 import { addUser, verify } from "../model/user.module.js";
 
 
@@ -111,5 +111,27 @@ export const jobDeleteController = (req,res) => {
   }
   else{
     res.status(500).render('404',{login: req.session.userName,message:"Job not found"});
+  }
+}
+
+export const getJobUpdateController = (req,res)=>{
+  const id = req.params.id;
+  const job = getJobById(id);
+  if(job){
+    res.status(200).render('jobPostUpdateForm',{login: req.session.userName,job:job});
+  }
+  else{
+    res.status(500).render('404',{login: req.session.userName,message:"Job not found"});
+  }
+}
+
+export const jobUpdateController = (req,res)=>{
+  const id = req.params.id;
+  const job = updateJob(id,req.body);
+  if(job){
+    res.status(200).redirect('/jobs');
+  }
+  else{
+    res.status(404).render('404',{login: req.session.userName,message:""});
   }
 }

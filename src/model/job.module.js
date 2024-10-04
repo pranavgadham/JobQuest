@@ -7,7 +7,15 @@ let jobs = [
     salary: "14-20lpa",
     deadline: "30 Aug 2023",
     openings: 5,
-    applicants: [],
+    applicants: [
+      {
+        id: 1728045707660,
+        name: 'xyz',
+        email: 'xyz@gmail.com',
+        contact: '8908908900',
+        resume: '/resumes/1728045707656-resume 1.pdf'
+      }
+    ],
     skills: ["Nodejs", "Express", "Reactjs"],
   },
   {
@@ -76,3 +84,8 @@ export const deleteJob = (id) => {
     throw new Error("Job not Found");
   }
 }
+
+export const updateJob = (id,updatedJob) => {
+  const job = getJobById(id);
+
+} 
