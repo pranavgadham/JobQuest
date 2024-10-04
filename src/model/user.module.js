@@ -14,7 +14,6 @@ export const addUser = ({ name, email, password }) => {
     email: email,
     password: password,
   };
-  console.log(newUser);
   users.push(newUser);
 };
 
