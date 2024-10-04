@@ -1,5 +1,10 @@
 const users = [
-  { id: 1, name: "Pranav", email: "xyz@gmail.com", password: "1234" },
+  {
+    id: 1728047503358,
+    name: "xyz",
+    email: "xyz@gmail.com",
+    password: "1234",
+  },
 ];
 
 export const addUser = ({ name, email, password }) => {
@@ -9,10 +14,11 @@ export const addUser = ({ name, email, password }) => {
     email: email,
     password: password,
   };
+  console.log(newUser);
   users.push(newUser);
 };
 
-export const verify = ({email,password}) => {
-    const user = users.find(u => u.email === email && u.password === password)
-    return user;
-}
+export const verify = ({ email, password }) => {
+  const user = users.find((u) => u.email === email && u.password === password);
+  return user;
+};

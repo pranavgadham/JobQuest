@@ -1,6 +1,14 @@
-import { getAllJobs, getJobById, addApplicant, addJob, deleteJob, updateJob } from "../model/job.module.js";
+import {
+  getAllJobs,
+  getJobById,
+  addApplicant,
+  addJob,
+  deleteJob,
+  updateJob,
+  getApplicants,
+  getJobsByCompany
+} from "../model/job.module.js";
 import { addUser, verify } from "../model/user.module.js";
-
 
 export const homeController = (req, res) => {
   res.render("home", { login: req.session.userName });
@@ -10,7 +18,6 @@ export const jobController = (req, res) => {
   const jobs = getAllJobs();
   res.render("jobs", { login: req.session.userName, jobs: jobs });
 };
-
 
 export const registerController = (req, res) => {
   if (req.body) {
@@ -30,12 +37,10 @@ export const loginController = (req, res) => {
       req.session.userName = user.name;
       res.status(201).render("home", { login: user.name });
     } else {
-      res
-        .status(401)
-        .render("login", {
-          login: req.session.userName,
-          error: "Invalid email or password",
-        });
+      res.status(401).render("login", {
+        login: req.session.userName,
+        error: "Invalid email or password",
+      });
     }
   }
 };
@@ -50,20 +55,20 @@ export const logOut = (req, res) => {
   });
 };
 
-export const jobDetailController = (req,res) => {
+export const jobDetailController = (req, res) => {
   const id = req.params.id;
-  const job  = getJobById(id);
-  if(job){
-    res.status(200).render('jobDetail',{ login: req.session.userName, job:job });
+  const job = getJobById(id);
+  if (job) {
+    res
+      .status(200)
+      .render("jobDetail", { login: req.session.userName, job: job });
+  } else {
+    res
+      .status(404)
+      .render("404", { login: req.session.userName, message: "Job not found" });
   }
-  else{
-    res.status(404).render('404',{login: req.session.userName,message:"Job not found"});
-  }
-}
+};
 
-export const errorControlle = (req,res) =>{
-  res.status(404).render('404',{login: req.session.userName,message:""});
-} 
 
 export const applyHandler = (req, res) => {
   const id = req.params.id;
@@ -73,65 +78,100 @@ export const applyHandler = (req, res) => {
 
     addApplicant(id, { name, email, contact, resumeURL });
 
-    res.status(200).redirect('/jobs');
+    res.status(200).redirect("/jobs");
   } else {
-    res.status(404).render('404', { login: req.session.userName, message: "Something went wrong" });
+    res
+      .status(404)
+      .render("404", {
+        login: req.session.userName,
+        message: "Something went wrong",
+      });
   }
 };
 
-
-export const applicantsHandler = (req,res) =>{
-
-}
-
-export const getFormController = (req,res) => {
-  if(req.session.userName){
-    res.status(200).render('jobPostForm',{login: req.session.userName});
+export const applicantsHandler = (req, res) => {
+  if (req.session.userName) {
+    const id = req.params.id;
+    const applicants = getApplicants(id);
+    if (applicants) {
+      res
+        .status(200)
+        .render("applicantsList", {
+          login: req.session.userName,
+          applicants: applicants,
+        });
+    } else {
+      res
+        .status(500)
+        .render("404", {
+          login: req.session.userName,
+          message: "Something went wrong",
+        });
+    }
   }else{
-    res.status(404).render('404',{login: req.session.userName,message:""});
+    res.status(404).render("404", { login: req.session.userName, message: "" });
   }
+};
 
-}
+export const getFormController = (req, res) => {
+  if (req.session.userName) {
+    res.status(200).render("jobPostForm", { login: req.session.userName });
+  } else {
+    res.status(404).render("404", { login: req.session.userName, message: "" });
+  }
+};
 
-export const jobPostController = (req,res) => {
-  if(req.body){
+export const jobPostController = (req, res) => {
+  if (req.body) {
     addJob(req.body);
-    res.status(200).redirect('/jobs');
+    res.status(200).redirect("/jobs");
+  } else {
+    res.status(404).render("404", { login: req.session.userName, message: "" });
   }
-  else{
-    res.status(404).render('404',{login: req.session.userName,message:""});
-  }
-}
+};
 
-export const jobDeleteController = (req,res) => {
+export const jobDeleteController = (req, res) => {
   const id = req.params.id;
   const deletedJob = deleteJob(id);
-  if(deleteJob){
-    res.status(200).redirect('/jobs');
+  if (deleteJob) {
+    res.status(200).redirect("/jobs");
+  } else {
+    res
+      .status(500)
+      .render("404", { login: req.session.userName, message: "Job not found" });
   }
-  else{
-    res.status(500).render('404',{login: req.session.userName,message:"Job not found"});
-  }
-}
+};
 
-export const getJobUpdateController = (req,res)=>{
+export const getJobUpdateController = (req, res) => {
   const id = req.params.id;
   const job = getJobById(id);
-  if(job){
-    res.status(200).render('jobPostUpdateForm',{login: req.session.userName,job:job});
+  if (job) {
+    res
+      .status(200)
+      .render("jobPostUpdateForm", { login: req.session.userName, job: job });
+  } else {
+    res
+      .status(500)
+      .render("404", { login: req.session.userName, message: "Job not found" });
   }
-  else{
-    res.status(500).render('404',{login: req.session.userName,message:"Job not found"});
-  }
-}
+};
 
-export const jobUpdateController = (req,res)=>{
+export const jobUpdateController = (req, res) => {
   const id = req.params.id;
-  const job = updateJob(id,req.body);
-  if(job){
-    res.status(200).redirect('/jobs');
+  const job = updateJob(id, req.body);
+  if (job) {
+    res.status(200).redirect("/jobs");
+  } else {
+    res.status(404).render("404", { login: req.session.userName, message: "" });
   }
-  else{
-    res.status(404).render('404',{login: req.session.userName,message:""});
+};
+
+export const jobSearchController = (req,res) => {
+  const search = req.query.search;
+  const jobs = getJobsByCompany(search);
+  if(jobs){
+    res.render("jobs", { login: req.session.userName, jobs: jobs });
+  }else{
+    res.status(200).render("404", { login: req.session.userName, message: "No job found" });
   }
 }

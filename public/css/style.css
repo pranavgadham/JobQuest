@@ -73,3 +73,9 @@
 .customeIcon{
     margin: 5px;
 }
+
+/* Applicant Table */
+.applicantTable{
+    margin: 16px;
+    text-align: center;
+}

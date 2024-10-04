@@ -1,12 +1,12 @@
 let jobs = [
   {
-    id: 1,
-    company: "xyz",
-    role: "SDE",
-    location: "Gurgaon HR IND Remote",
-    salary: "14-20lpa",
-    deadline: "30 Aug 2023",
-    openings: 5,
+    id: 1728046867821,
+    company: 'XYZ',
+    role: 'SDE',
+    location: 'Gurgaon HR IND Remote',
+    salary: '14-20lpa',
+    deadline: '2023-12-04',
+    openings: '5',
     applicants: [
       {
         id: 1728045707660,
@@ -16,19 +16,19 @@ let jobs = [
         resume: '/resumes/1728045707656-resume 1.pdf'
       }
     ],
-    skills: ["Nodejs", "Express", "Reactjs"],
+    skills: [ 'Django', 'Flutter', 'Java', 'HTML', 'CSS' ]
   },
   {
-    id: 2,
-    company: "lmn",
-    role: "Angular Developer",
-    location: "Gurgaon HR IND Remote",
-    salary: "20-27lpa",
-    deadline: "30 Aug 2023",
-    openings: 5,
+    id: 1728046730963,
+    company: 'lmn',
+    role: 'Angular Developer',
+    location: 'Gurgaon HR IND Remote',
+    salary: '20-27lpa',
+    deadline: '2024-09-25',
+    openings: '10',
     applicants: [],
-    skills: ["Nodejs", "Express", "Reactjs"],
-  },
+    skills: [ 'NodeJS', 'ReactJS', 'Express' ]
+  }
 ];
 
 export const getAllJobs = () => {
@@ -50,7 +50,6 @@ export const addApplicant = (id, { name, email, contact, resumeURL }) => {
     contact: contact,
     resume: resumePath,
   };
-  console.log(applicant);
   const job = getJobById(id);
   job.applicants.push(applicant);
 
@@ -86,6 +85,24 @@ export const deleteJob = (id) => {
 }
 
 export const updateJob = (id,updatedJob) => {
-  const job = getJobById(id);
-
+  let job = getJobById(id);
+  job.company = updatedJob.company;
+  job.role = updatedJob.role;
+  job.role = updatedJob.role;
+  job.location = updatedJob.location;
+  job.salary = updatedJob.salary;
+  job.deadline = updatedJob.deadline;
+  job.openings = updatedJob.openings;
+  job.skills = updatedJob.skills.split(",");
+  return job;
 } 
+
+export const getApplicants = (id) => {
+  const job = getJobById(id);
+  return job.applicants;
+}
+
+export const getJobsByCompany = (company) => {
+  const matchedJobs = jobs.filter(j => j.company.toLowerCase() === company.toLowerCase());
+  return matchedJobs;
+}
