@@ -11,15 +11,18 @@ import {
 import { addUser, verify } from "../model/user.module.js";
 
 export const homeController = (req, res) => {
+  console.log(`${req.method} ${req.path}`);
   res.render("home", { login: req.session.userName });
 };
 
 export const jobController = (req, res) => {
+  console.log(`${req.method} ${req.path}`);
   const jobs = getAllJobs();
   res.render("jobs", { login: req.session.userName, jobs: jobs });
 };
 
 export const registerController = (req, res) => {
+  console.log(`${req.method} ${req.path}`);
   if (req.body) {
     addUser(req.body);
     res.status(200).render("login", { login: req.session.userName });
@@ -27,10 +30,12 @@ export const registerController = (req, res) => {
 };
 
 export const loginPageController = (req, res) => {
+  console.log(`${req.method} ${req.path}`);
   res.render("login", { login: req.session.userName });
 };
 
 export const loginController = (req, res) => {
+  console.log(`${req.method} ${req.path}`);
   if (req.body) {
     const user = verify(req.body);
     if (user) {
@@ -46,6 +51,7 @@ export const loginController = (req, res) => {
 };
 
 export const logOut = (req, res) => {
+  console.log(`${req.method} ${req.path}`);
   req.session.destroy((err) => {
     if (err) {
       console.log(err);
@@ -56,6 +62,7 @@ export const logOut = (req, res) => {
 };
 
 export const jobDetailController = (req, res) => {
+  console.log(`${req.method} ${req.path}`);
   const id = req.params.id;
   const job = getJobById(id);
   if (job) {
@@ -71,6 +78,7 @@ export const jobDetailController = (req, res) => {
 
 
 export const applyHandler = (req, res) => {
+  console.log(`${req.method} ${req.path}`);
   const id = req.params.id;
   if (req.file && req.body) {
     const { name, email, contact } = req.body;
@@ -90,6 +98,7 @@ export const applyHandler = (req, res) => {
 };
 
 export const applicantsHandler = (req, res) => {
+  console.log(`${req.method} ${req.path}`);
   if (req.session.userName) {
     const id = req.params.id;
     const applicants = getApplicants(id);
@@ -114,6 +123,7 @@ export const applicantsHandler = (req, res) => {
 };
 
 export const getFormController = (req, res) => {
+  console.log(`${req.method} ${req.path}`);
   if (req.session.userName) {
     res.status(200).render("jobPostForm", { login: req.session.userName });
   } else {
@@ -122,6 +132,7 @@ export const getFormController = (req, res) => {
 };
 
 export const jobPostController = (req, res) => {
+  console.log(`${req.method} ${req.path}`);
   if (req.body) {
     addJob(req.body);
     res.status(200).redirect("/jobs");
@@ -131,6 +142,7 @@ export const jobPostController = (req, res) => {
 };
 
 export const jobDeleteController = (req, res) => {
+  console.log(`${req.method} ${req.path}`);
   const id = req.params.id;
   const deletedJob = deleteJob(id);
   if (deleteJob) {
@@ -143,6 +155,7 @@ export const jobDeleteController = (req, res) => {
 };
 
 export const getJobUpdateController = (req, res) => {
+  console.log(`${req.method} ${req.path}`);
   const id = req.params.id;
   const job = getJobById(id);
   if (job) {
@@ -157,6 +170,7 @@ export const getJobUpdateController = (req, res) => {
 };
 
 export const jobUpdateController = (req, res) => {
+  console.log(`${req.method} ${req.path}`);
   const id = req.params.id;
   const job = updateJob(id, req.body);
   if (job) {
@@ -167,6 +181,7 @@ export const jobUpdateController = (req, res) => {
 };
 
 export const jobSearchController = (req,res) => {
+  console.log(`${req.method} ${req.path}`);
   const search = req.query.search;
   const jobs = getJobsByCompany(search);
   if(jobs){
