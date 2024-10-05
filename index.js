@@ -4,23 +4,7 @@ import session from "express-session";
 import dotenv from "dotenv";
 import resumeUpload from './middlewar/fileUploadMiddleware.js'
 import expressEjsLayouts from "express-ejs-layouts";
-import {
-  homeController,
-  jobController,
-  registerController,
-  loginController,
-  loginPageController,
-  logOut,
-  jobDetailController,
-  applyHandler,
-  applicantsHandler,
-  getFormController,
-  jobPostController,
-  jobDeleteController,
-  getJobUpdateController,
-  jobUpdateController,
-  jobSearchController
-} from "./src/controller/controller.js";
+import {job,recruiter,application} from "./src/controller/controller.js";
 
 // Express App Configuration
 const app = express();
@@ -48,22 +32,31 @@ app.use(
   })
 );
 
+//Controller class objects
+const jobsController = new job();
+const recruiterController = new recruiter();
+const applicationController = new application();
 
-// Routes (dynamic routes come after static files)
-app.get("/", homeController);
-app.get("/jobs", jobController);
-app.post("/register", registerController);
-app.get("/login", loginPageController);
-app.post("/login", loginController);
-app.get("/logout", logOut);
-app.get("/job/:id", jobDetailController);
-app.post("/apply/:id", resumeUpload.single("resume"), applyHandler);
-app.get("/applicants/:id", applicantsHandler);
-app.get('/postjob',getFormController);
-app.post('/postjob',jobPostController)
-app.get('/job/:id/delete',jobDeleteController);
-app.get('/job/:id/update',getJobUpdateController);
-app.post('/job/:id/update',jobUpdateController);
-app.get('/search',jobSearchController)
+//Application routes
+app.post("/apply/:id", resumeUpload.single("resume"), applicationController.applyHandler);
+app.get("/applicants/:id", applicationController.applicantsHandler);
+
+//Recruiter routes
+app.post("/register", recruiterController.registerController);
+app.get("/login", recruiterController.loginPageController);
+app.post("/login", recruiterController.loginController);
+app.get("/logout", recruiterController.logOut);
+
+
+//Job routes
+app.get("/", jobsController.homeController);
+app.get("/jobs", jobsController.jobController);
+app.get("/job/:id", jobsController.jobDetailController);
+app.get('/postjob',jobsController.getFormController);
+app.post('/postjob',jobsController.jobPostController)
+app.get('/job/:id/delete',jobsController.jobDeleteController);
+app.get('/job/:id/update',jobsController.getJobUpdateController);
+app.post('/job/:id/update',jobsController.jobUpdateController);
+app.get('/search',jobsController.jobSearchController)
 
 export default app;

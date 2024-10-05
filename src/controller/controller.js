@@ -1,192 +1,261 @@
-import {
-  getAllJobs,
-  getJobById,
-  addApplicant,
-  addJob,
-  deleteJob,
-  updateJob,
-  getApplicants,
-  getJobsByCompany
-} from "../model/job.module.js";
-import { addUser, verify } from "../model/user.module.js";
+import jobQuestRepository from "../model/jobRepository.js";
 
-export const homeController = (req, res) => {
-  console.log(`${req.method} ${req.path}`);
-  res.render("home", { login: req.session.userName });
-};
+const repository = new jobQuestRepository();
 
-export const jobController = (req, res) => {
-  console.log(`${req.method} ${req.path}`);
-  const jobs = getAllJobs();
-  res.render("jobs", { login: req.session.userName, jobs: jobs });
-};
-
-export const registerController = (req, res) => {
-  console.log(`${req.method} ${req.path}`);
-  if (req.body) {
-    addUser(req.body);
-    res.status(200).render("login", { login: req.session.userName });
-  }
-};
-
-export const loginPageController = (req, res) => {
-  console.log(`${req.method} ${req.path}`);
-  res.render("login", { login: req.session.userName });
-};
-
-export const loginController = (req, res) => {
-  console.log(`${req.method} ${req.path}`);
-  if (req.body) {
-    const user = verify(req.body);
-    if (user) {
-      req.session.userName = user.name;
-      res.status(201).render("home", { login: user.name });
-    } else {
-      res.status(401).render("login", {
-        login: req.session.userName,
-        error: "Invalid email or password",
-      });
+export class recruiter {
+  registerController = async (req, res) => {
+    console.log(`${req.method} ${req.path}`);
+    try {
+      if (req.body) {
+        const newUser = await repository.addUser(req.body);
+        if (newUser) {
+          res.status(200).render("login", { login: req.session.userName });
+        } else {
+          res
+            .status(500)
+            .render("404", {
+              login: req.session.userName,
+              message: "Something went wrong please try again",
+            });
+        }
+      }
+    } catch (error) {
+      res
+        .status(404)
+        .render("404", { login: req.session.userName, message: error.message });
     }
-  }
-};
+  };
 
-export const logOut = (req, res) => {
-  console.log(`${req.method} ${req.path}`);
-  req.session.destroy((err) => {
-    if (err) {
-      console.log(err);
-    } else {
-      res.redirect("/");
+  loginPageController = (req, res) => {
+    console.log(`${req.method} ${req.path}`);
+    res.render("login", { login: req.session.userName });
+  };
+
+  loginController = async (req, res) => {
+    console.log(`${req.method} ${req.path}`);
+    try {
+      if (req.body) {
+        const user = await repository.verify(req.body);
+        if (user) {
+          req.session.userName = user.name;
+          req.session.userId = user._id;
+          res.status(201).render("home", { login: user.name });
+        } else {
+          res.status(401).render("login", {
+            login: req.session.userName,
+            error: "Invalid email or password",
+          });
+        }
+      }
+    } catch (error) {
+      console.log(error);
     }
-  });
-};
+  };
 
-export const jobDetailController = (req, res) => {
-  console.log(`${req.method} ${req.path}`);
-  const id = req.params.id;
-  const job = getJobById(id);
-  if (job) {
-    res
-      .status(200)
-      .render("jobDetail", { login: req.session.userName, job: job });
-  } else {
-    res
-      .status(404)
-      .render("404", { login: req.session.userName, message: "Job not found" });
-  }
-};
+  logOut = (req, res) => {
+    console.log(`${req.method} ${req.path}`);
+    req.session.destroy((error) => {
+      if (error) {
+        console.log(error);
+      } else {
+        res.redirect("/");
+      }
+    });
+  };
+}
 
-
-export const applyHandler = (req, res) => {
-  console.log(`${req.method} ${req.path}`);
-  const id = req.params.id;
-  if (req.file && req.body) {
-    const { name, email, contact } = req.body;
-    const resumeURL = req.file.filename;
-
-    addApplicant(id, { name, email, contact, resumeURL });
-
-    res.status(200).redirect("/jobs");
-  } else {
-    res
-      .status(404)
-      .render("404", {
-        login: req.session.userName,
-        message: "Something went wrong",
-      });
-  }
-};
-
-export const applicantsHandler = (req, res) => {
-  console.log(`${req.method} ${req.path}`);
-  if (req.session.userName) {
+export class application {
+  applyHandler = async (req, res) => {
+    console.log(`${req.method} ${req.path}`);
     const id = req.params.id;
-    const applicants = getApplicants(id);
-    if (applicants) {
-      res
-        .status(200)
-        .render("applicantsList", {
-          login: req.session.userName,
-          applicants: applicants,
-        });
-    } else {
-      res
-        .status(500)
-        .render("404", {
+    try {
+      if (req.file && req.body) {
+        const { name, email, contact } = req.body;
+        const resumeURL = req.file.filename;
+
+        await repository.addApplicant(id, { name, email, contact, resumeURL });
+
+        res.status(200).redirect("/jobs");
+      } else {
+        res.status(404).render("404", {
           login: req.session.userName,
           message: "Something went wrong",
         });
+      }
+    } catch (error) {
+      console.log(error);
     }
-  }else{
-    res.status(404).render("404", { login: req.session.userName, message: "" });
-  }
-};
+  };
 
-export const getFormController = (req, res) => {
-  console.log(`${req.method} ${req.path}`);
-  if (req.session.userName) {
-    res.status(200).render("jobPostForm", { login: req.session.userName });
-  } else {
-    res.status(404).render("404", { login: req.session.userName, message: "" });
-  }
-};
+  applicantsHandler = async (req, res) => {
+    console.log(`${req.method} ${req.path}`);
+    try {
+      if (req.session.userName) {
+        const id = req.params.id;
+        const applicants = await repository.getApplicants(id);
+        if (applicants) {
+          res.status(200).render("applicantsList", {
+            login: req.session.userName,
+            applicants: applicants,
+          });
+        } else {
+          res.status(500).render("404", {
+            login: req.session.userName,
+            message: "Something went wrong",
+          });
+        }
+      } else {
+        res
+          .status(404)
+          .render("404", { login: req.session.userName, message: "" });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+}
 
-export const jobPostController = (req, res) => {
-  console.log(`${req.method} ${req.path}`);
-  if (req.body) {
-    addJob(req.body);
-    res.status(200).redirect("/jobs");
-  } else {
-    res.status(404).render("404", { login: req.session.userName, message: "" });
-  }
-};
+export class job {
+  homeController = (req, res) => {
+    console.log(`${req.method} ${req.path}`);
+    res.render("home", { login: req.session.userName });
+  };
 
-export const jobDeleteController = (req, res) => {
-  console.log(`${req.method} ${req.path}`);
-  const id = req.params.id;
-  const deletedJob = deleteJob(id);
-  if (deleteJob) {
-    res.status(200).redirect("/jobs");
-  } else {
-    res
-      .status(500)
-      .render("404", { login: req.session.userName, message: "Job not found" });
-  }
-};
+  jobController = async (req, res) => {
+    console.log(`${req.method} ${req.path}`);
+    try {
+      const jobs = await repository.getAllJobs();
+      res.render("jobs", { login: req.session.userName, jobs: jobs });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-export const getJobUpdateController = (req, res) => {
-  console.log(`${req.method} ${req.path}`);
-  const id = req.params.id;
-  const job = getJobById(id);
-  if (job) {
-    res
-      .status(200)
-      .render("jobPostUpdateForm", { login: req.session.userName, job: job });
-  } else {
-    res
-      .status(500)
-      .render("404", { login: req.session.userName, message: "Job not found" });
-  }
-};
+  jobDetailController = async (req, res) => {
+    console.log(`${req.method} ${req.path}`);
+    const id = req.params.id;
+    try {
+      const job = await repository.getJobById(id);
+      if (job) {
+        res
+          .status(200)
+          .render("jobDetail", { login: req.session.userName, job: job });
+      } else {
+        res
+          .status(404)
+          .render("404", {
+            login: req.session.userName,
+            message: "Job not found",
+          });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-export const jobUpdateController = (req, res) => {
-  console.log(`${req.method} ${req.path}`);
-  const id = req.params.id;
-  const job = updateJob(id, req.body);
-  if (job) {
-    res.status(200).redirect("/jobs");
-  } else {
-    res.status(404).render("404", { login: req.session.userName, message: "" });
-  }
-};
+  getFormController = (req, res) => {
+    console.log(`${req.method} ${req.path}`);
+    if (req.session.userName) {
+      res.status(200).render("jobPostForm", { login: req.session.userName });
+    } else {
+      res
+        .status(404)
+        .render("404", { login: req.session.userName, message: "" });
+    }
+  };
 
-export const jobSearchController = (req,res) => {
-  console.log(`${req.method} ${req.path}`);
-  const search = req.query.search;
-  const jobs = getJobsByCompany(search);
-  if(jobs){
-    res.render("jobs", { login: req.session.userName, jobs: jobs });
-  }else{
-    res.status(200).render("404", { login: req.session.userName, message: "No job found" });
-  }
+  jobPostController = async (req, res) => {
+    console.log(`${req.method} ${req.path}`);
+    try {
+      const id = req.session.userId;
+      if (req.body) {
+        await repository.addJob(id, req.body);
+        res.status(200).redirect("/jobs");
+      } else {
+        res
+          .status(404)
+          .render("404", { login: req.session.userName, message: "" });
+      }
+    } catch (error) {
+      console.log(eror);
+    }
+  };
+
+  jobDeleteController = async (req, res) => {
+    console.log(`${req.method} ${req.path}`);
+    const id = req.params.id;
+    const hostId = req.session.userId;
+    try {
+      await repository.deleteJob(id,hostId);
+        res.status(200).redirect("/jobs");
+    } catch (error) {
+      res
+        .status(404)
+        .render("404", { login: req.session.userName, message: error.message });
+    }
+  };
+
+  getJobUpdateController = async (req, res) => {
+    console.log(`${req.method} ${req.path}`);
+    const id = req.params.id;
+    try {
+      const job = await repository.getJobById(id);
+      if (job) {
+        res
+          .status(200)
+          .render("jobPostUpdateForm", {
+            login: req.session.userName,
+            job: job,
+          });
+      } else {
+        res
+          .status(500)
+          .render("404", {
+            login: req.session.userName,
+            message: "Job not found",
+          });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  jobUpdateController = async (req, res) => {
+    console.log(`${req.method} ${req.path}`);
+    const id = req.params.id;
+    try {
+      const job = await repository.updateJob(id, req.body, req.session.userId);
+      if (job) {
+        res.status(200).redirect("/jobs");
+      } else {
+        res
+          .status(404)
+          .render("404", { login: req.session.userName, message: "" });
+      }
+    } catch (error) {
+      res
+        .status(404)
+        .render("404", { login: req.session.userName, message: error.message });
+    }
+  };
+
+  jobSearchController = async (req, res) => {
+    console.log(`${req.method} ${req.path}`);
+    const search = req.query.search;
+    try {
+      const jobs = await repository.getJobsByCompany(search);
+      if (jobs) {
+        res.render("jobs", { login: req.session.userName, jobs: jobs });
+      } else {
+        res
+          .status(200)
+          .render("404", {
+            login: req.session.userName,
+            message: "No job found",
+          });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 }
