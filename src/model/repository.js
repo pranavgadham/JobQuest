@@ -86,7 +86,7 @@ export default class jobQuestRepository {
   }
 
   async getJobsByCompany(company) {
-    const matchedJobs = await jobModel.find({ company: company });
+    const matchedJobs = await jobModel.find({ company: { $regex: new RegExp(company, 'i') } });
     return matchedJobs;
   }
 
@@ -107,7 +107,6 @@ export default class jobQuestRepository {
   }
   async getApplicants(id) {
     const job = await jobModel.findById(id).populate("applicants");
-    console.log(job.applicants);
     return job.applicants;
   }
 }
