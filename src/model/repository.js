@@ -2,6 +2,7 @@ import { recruiterSchem } from "./recruiter.schema.js";
 import { applicantSchema } from "./applicant.schema.js";
 import { jobSchema } from "./jobs.schema.js";
 import mongoose from "mongoose";
+import { hashPassword,compareHashedPassword } from "../utils/hashPassword.js";
 
 const jobModel = mongoose.model("Job", jobSchema);
 const recruiterModel = mongoose.model("Recruiter", recruiterSchem);
@@ -10,15 +11,20 @@ const applicantModel = mongoose.model("Applicants", applicantSchema);
 export default class jobQuestRepository {
   // Recruiter Operations
   async addUser({ name, email, password }) {
-    const newUser = new recruiterModel({ name, email, password });
+    const encryptedPass = await hashPassword(password)
+    const newUser = new recruiterModel({ name, email,password:encryptedPass });
     const result = await newUser.save();
     return result;
   }
   async verify({ email, password }) {
-    const recruiter = await recruiterModel.findOne({
-      email: email,
-      password: password,
-    });
+    const recruiter = await recruiterModel.findOne({ email: email });
+    if (!recruiter) {
+      throw new Error("Recruiter not found");
+    }
+    const isPasswordValid = await compareHashedPassword(password, recruiter.password);
+    if (!isPasswordValid) {
+      throw new Error("Invalid password");
+    }
     return recruiter;
   }
 

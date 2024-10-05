@@ -1,10 +1,9 @@
-import jobQuestRepository from "../model/jobRepository.js";
+import jobQuestRepository from "../model/repository.js";
 
 const repository = new jobQuestRepository();
 
 export class recruiter {
   registerController = async (req, res) => {
-    console.log(`${req.method} ${req.path}`);
     try {
       if (req.body) {
         const newUser = await repository.addUser(req.body);
@@ -27,33 +26,38 @@ export class recruiter {
   };
 
   loginPageController = (req, res) => {
-    console.log(`${req.method} ${req.path}`);
     res.render("login", { login: req.session.userName });
   };
 
   loginController = async (req, res) => {
-    console.log(`${req.method} ${req.path}`);
     try {
       if (req.body) {
         const user = await repository.verify(req.body);
         if (user) {
           req.session.userName = user.name;
           req.session.userId = user._id;
-          res.status(201).render("home", { login: user.name });
+          res.status(200).render("home", { login: user.name });
         } else {
           res.status(401).render("login", {
             login: req.session.userName,
             error: "Invalid email or password",
           });
         }
+      } else {
+        res.status(400).render("login", {
+          login: req.session.userName,
+          error: "Email and password are required",
+        });
       }
     } catch (error) {
-      console.log(error);
+      res.status(500).render("login", {
+        login: req.session.userName,
+        error: error.message,
+      });
     }
   };
 
   logOut = (req, res) => {
-    console.log(`${req.method} ${req.path}`);
     req.session.destroy((error) => {
       if (error) {
         console.log(error);
@@ -66,7 +70,6 @@ export class recruiter {
 
 export class application {
   applyHandler = async (req, res) => {
-    console.log(`${req.method} ${req.path}`);
     const id = req.params.id;
     try {
       if (req.file && req.body) {
@@ -88,7 +91,6 @@ export class application {
   };
 
   applicantsHandler = async (req, res) => {
-    console.log(`${req.method} ${req.path}`);
     try {
       if (req.session.userName) {
         const id = req.params.id;
@@ -117,12 +119,10 @@ export class application {
 
 export class job {
   homeController = (req, res) => {
-    console.log(`${req.method} ${req.path}`);
     res.render("home", { login: req.session.userName });
   };
 
   jobController = async (req, res) => {
-    console.log(`${req.method} ${req.path}`);
     try {
       const jobs = await repository.getAllJobs();
       res.render("jobs", { login: req.session.userName, jobs: jobs });
@@ -132,7 +132,6 @@ export class job {
   };
 
   jobDetailController = async (req, res) => {
-    console.log(`${req.method} ${req.path}`);
     const id = req.params.id;
     try {
       const job = await repository.getJobById(id);
@@ -154,7 +153,6 @@ export class job {
   };
 
   getFormController = (req, res) => {
-    console.log(`${req.method} ${req.path}`);
     if (req.session.userName) {
       res.status(200).render("jobPostForm", { login: req.session.userName });
     } else {
@@ -165,7 +163,6 @@ export class job {
   };
 
   jobPostController = async (req, res) => {
-    console.log(`${req.method} ${req.path}`);
     try {
       const id = req.session.userId;
       if (req.body) {
@@ -182,7 +179,6 @@ export class job {
   };
 
   jobDeleteController = async (req, res) => {
-    console.log(`${req.method} ${req.path}`);
     const id = req.params.id;
     const hostId = req.session.userId;
     try {
@@ -196,7 +192,6 @@ export class job {
   };
 
   getJobUpdateController = async (req, res) => {
-    console.log(`${req.method} ${req.path}`);
     const id = req.params.id;
     try {
       const job = await repository.getJobById(id);
@@ -221,7 +216,6 @@ export class job {
   };
 
   jobUpdateController = async (req, res) => {
-    console.log(`${req.method} ${req.path}`);
     const id = req.params.id;
     try {
       const job = await repository.updateJob(id, req.body, req.session.userId);
@@ -240,7 +234,6 @@ export class job {
   };
 
   jobSearchController = async (req, res) => {
-    console.log(`${req.method} ${req.path}`);
     const search = req.query.search;
     try {
       const jobs = await repository.getJobsByCompany(search);
