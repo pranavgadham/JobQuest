@@ -174,7 +174,7 @@ export class job {
           .render("404", { login: req.session.userName, message: "" });
       }
     } catch (error) {
-      console.log(eror);
+      console.log(error);
     }
   };
 
