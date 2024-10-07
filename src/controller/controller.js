@@ -138,7 +138,7 @@ export class job {
       if (job) {
         res
           .status(200)
-          .render("jobDetail", { login: req.session.userName, job: job });
+          .render("jobdetail", { login: req.session.userName, job: job });
       } else {
         res
           .status(404)
