@@ -29,25 +29,27 @@ Before setting up the project, make sure you have the following installed:
 Follow these steps to set up the JobQuest project on your local machine:
 
 ### 1. Clone the Repository
+```bash
 git clone https://github.com/your-username/JobQuest.git
-
 cd JobQuest
+```
 
 ### 2. Install Dependencies
 Install the required packages using npm:
 
+```bash
 npm install
+```
 
 ### 3. Set Up Environment Variables
 Create a .env file in the root directory with the following values:
 
-.env file
-
-Secret Key for Sessions
-
+```bash
+#.env file
+#Secret Key for Sessions
 secretKey=your_64bit_hex_secret_key
-
 mongoConnection=your_mongo_connection_url
+```
 
 secretKey: A 64-bit hexadecimal secret key for securing sessions.
 
@@ -56,9 +58,9 @@ mongoConnection: Your MongoDB connection string, including your database name.
 ### 5. Run the Application
 To start the application in development mode:
 
+```bash
 npm run dev
-
-The application will be available at http://localhost:3000.
+```
 
 ### Technologies Used
 
