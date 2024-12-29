@@ -5,7 +5,6 @@ JobQuest is a web application where recruiters can post jobs, and applicants can
 
 ## Live Demo
 [Live JobQuest Application](https://jobquest-um83.onrender.com)  
-*(Update the link above with your live application URL)*
 
 ## Features
 
