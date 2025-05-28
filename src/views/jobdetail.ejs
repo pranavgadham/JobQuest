@@ -18,12 +18,13 @@
                   <% }) %>
               </div>
           </p>
-          <button
+      <button
         type="button"
         class="btn btn-primary"
         data-bs-toggle="modal"
         data-bs-target="#staticBackdrop"
-      >
+        disabled="<%= login ? 'true' : 'false' %>"
+      >      
       Apply Now
       </button>
       <% if(login){ %> 

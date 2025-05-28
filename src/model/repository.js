@@ -62,7 +62,7 @@ export default class jobQuestRepository {
     if (job) {
       return job;
     } else {
-      throw new Error("Job not found or hostId mismatch");
+      throw new Error("You are not authorized to update this job or job not found");
     }
   }
 
@@ -81,7 +81,7 @@ export default class jobQuestRepository {
       await job.save();
       return job;
     } else {
-      throw new Error("Job not found or hostId mismatch");
+      throw new Error("You are not authorized to update this job or job not found");
     }
   }
 

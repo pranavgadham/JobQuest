@@ -82,7 +82,7 @@ export class application {
       } else {
         res.status(404).render("404", {
           login: req.session.userName,
-          message: "Something went wrong",
+          message: "Something went wrong"
         });
       }
     } catch (error) {
@@ -193,9 +193,18 @@ export class job {
 
   getJobUpdateController = async (req, res) => {
     const id = req.params.id;
+    const hostId = req.session.userId;
     try {
       const job = await repository.getJobById(id);
       if (job) {
+        if(job.host != hostId) {
+          return res
+            .status(403)
+            .render("404", {
+              login: req.session.userName,
+              message: "You are not authorized to update this job",
+            });
+        }
         res
           .status(200)
           .render("jobPostUpdateForm", {
