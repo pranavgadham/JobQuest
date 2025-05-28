@@ -1,16 +1,16 @@
-import bcrypt from "bcrypt";
+import argon2 from 'argon2';
 
 export const hashPassword = async (password) => {
   try {
-    return await bcrypt.hash(password, 12);
+    return await argon2.hash(password);
   } catch (error) {
-    throw error
+    throw error;
   }
 };
 export const compareHashedPassword = async (password, hashPassword) => {
   try {
-    return await bcrypt.compare(password, hashPassword);
+    return await argon2.verify(hashPassword, password);
   } catch (error) {
-    throw error
+    throw error;
   }
 };
